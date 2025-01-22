@@ -1,0 +1,16 @@
+FROM node:18
+
+WORKDIR /app
+
+# Copy the package files first for caching
+COPY package*.json ./
+RUN npm install
+
+# Copy the backend source code
+COPY . .
+
+# Expose the Express port
+EXPOSE 5000
+
+# Start the server
+CMD ["npm", "run", "dev"]

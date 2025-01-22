@@ -1,0 +1,10 @@
+FROM cirrusci/flutter:latest
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y openjdk-11-jdk curl unzip && \
+    rm -rf /var/lib/apt/lists/*
+
+EXPOSE 8080
+
+CMD ["sh", "-c", "flutter create . && flutter run -d web-server --web-port=8080"]

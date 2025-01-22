@@ -1,0 +1,51 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../Dockerfiles/Dockerfile.frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm start
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../Dockerfiles/Dockerfile.backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    command: npm run dev
+
+  flutter:
+    build:
+      context: .
+      dockerfile: Dockerfiles/Dockerfile.flutter
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./flutter_project:/app
+    command: sh -c "flutter create . && flutter run -d web-server --web-port=8080"
+
+  db:
+    image: mariadb:10.11
+    container_name: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: root_password
+      MARIADB_DATABASE: bakerydb
+      MARIADB_USER: bakery_user
+      MARIADB_PASSWORD: user_password
+    volumes:
+      - db:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+volumes:
+  db:
